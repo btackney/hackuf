@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
         description: DataTypes.STRING,
         price: DataTypes.STRING,
         latitude: DataTypes.STRING,
-        longitude: DataTypes.STRING
+        longitude: DataTypes.STRING,
+        available: DataTypes.BOOLEAN
     });
     return Box;
 };

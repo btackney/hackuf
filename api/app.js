@@ -39,9 +39,16 @@ const boxController = require('./controllers/box');
  */
 // app.post('/createUser', userController.createUser);
 // app.post('/pickup', boxController.pickupRental);
-app.get('/getBoxes', boxController.getBoxes);
 
+//User Management
+app.post('/createUser', userController.createUser);
+app.post('/updateUser', userController.updateUser);
+
+//Box Controller
+app.get('/getBoxes', boxController.getBoxes);
 app.post('/createBox', boxController.createBox);
+
+//Rental Controller
 app.post('/createRental', rentalController.createRental);
 app.post('/pickup', rentalController.pickup);
 app.post('/dropoff', rentalController.dropoff);

@@ -5,6 +5,7 @@ exports.getBoxes = (req, res) => {
         if(Box){
             return res.json({success: true, message: Box})
         } else {
+            res.status(500);
             return res.json({success: false, message: "Bad Request"})
         }
     })
@@ -22,7 +23,8 @@ exports.createBox = (req, res) => {
             description: req.query.description,
             price: req.query.price,
             latitude: req.query.latitude,
-            longitude: req.query.longitude
+            longitude: req.query.longitude,
+            available: 1
         }).then(Box => {
             console.log(Box.get);
             return res.json(Box.get);
