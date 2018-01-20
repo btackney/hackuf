@@ -2,11 +2,8 @@ let fs        = require('fs');
 let path      = require('path');
 let Sequelize = require('sequelize');
 let basename  = path.basename(__filename);
-let db = require('db');
-
-const sequelize = new Sequelize(process.env.DB_HOST, process.env.DB_USER, process.env.DB_PASS, {
-    dialect: 'mysql'
-});
+let db        = {};
+let sequelize = new Sequelize('mysql://hackuf:hackufbox@hackuf.cul7mcskonmm.us-east-1.rds.amazonaws.com:3306/hackuf');
 
 fs
     .readdirSync(__dirname)
@@ -18,13 +15,18 @@ fs
         db[model.name] = model;
     });
 
-Object.keys(db).forEach(modelName => {
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
-    }
-});
+// db.box.hasMany(db.rental, {as: 'rental'});
+// db.rental.hasOne(db.box, {as: 'box'});
+
+// Object.keys(db).forEach(modelName => {
+//     if (db[modelName].associate) {
+//         db[modelName].associate(db);
+//     }
+// });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
 
 module.exports = db;

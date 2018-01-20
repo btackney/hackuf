@@ -1,14 +1,18 @@
 const http = require('http');
 const https = require('https');
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-require('dotenv').config();
+
 
 /**
  * Express configuration.
  */
 let httpServer = http.createServer(app);
 // let httpsServer = https.createServer(credentials, app);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 /**
  * Allow CORS all routes.
@@ -26,20 +30,26 @@ app.use('/', (req, res, next) => {
  * Controllers.
  */
 const userController = require('./controllers/user');
-const pageController = require('./controllers/page');
-const signController = require('./controllers/sign');
+const rentalController = require('./controllers/rental');
+const boxController = require('./controllers/box');
 
 
 /**
  * Routes.
  */
-app.get('/pickup', (req,res) => {
-    console.log("sup");
-    res.json("hi")
+// app.post('/createUser', userController.createUser);
+// app.post('/pickup', boxController.pickupRental);
+app.get('/getBoxes', boxController.getBoxes);
+
+app.post('/createBox', boxController.createBox);
+app.post('/createRental', rentalController.createRental);
+app.post('/pickup', rentalController.pickup);
+app.post('/dropoff', rentalController.dropoff);
+
+app.get('/hi', (req, res) => {
+    console.log("hi");
+    res.send('hi');
 });
-
-app.get('/pickup', signController.runSign);
-
 /**
  * Start Express server.
  */
