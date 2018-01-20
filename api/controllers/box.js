@@ -1,12 +1,11 @@
 const models = require('../models');
 
 exports.getBoxes = (req, res) => {
-    console.log(req);
     models.box.findAll().then(Box => {
         if(Box){
-            res.json({success: true, message: Box})
+            return res.json({success: true, message: Box})
         } else {
-            res.json({success: false, message: "Bad Request"})
+            return res.json({success: false, message: "Bad Request"})
         }
     })
 };
@@ -26,7 +25,7 @@ exports.createBox = (req, res) => {
             longitude: req.query.longitude
         }).then(Box => {
             console.log(Box.get);
-            res.json(Box.get);
+            return res.json(Box.get);
         });
     // });
 };

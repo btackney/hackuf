@@ -3,7 +3,28 @@ let path      = require('path');
 let Sequelize = require('sequelize');
 let basename  = path.basename(__filename);
 let db        = {};
-let sequelize = new Sequelize('mysql://hackuf:hackufbox@hackuf.cul7mcskonmm.us-east-1.rds.amazonaws.com:3306/hackuf');
+let sequelize = new Sequelize('hackuf', 'hackuf', 'hackufbox', {
+        host: 'hackuf.cul7mcskonmm.us-east-1.rds.amazonaws.com',
+        dialect: 'mysql',
+        port: 3306,
+        pool: {
+            max: 5,
+            min: 0,
+            idle: 5000,
+            acquire: 20000,
+            evict: 30000,
+            handleDisconnects: true
+        },
+        operatorsAliases: false
+});
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
 
 fs
     .readdirSync(__dirname)
