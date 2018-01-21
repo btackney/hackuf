@@ -42,9 +42,6 @@ const auth = require('./middleware/auth');
 /**
  * Routes.
  */
-// app.post('/createUser', userController.createUser);
-// app.post('/pickup', boxController.pickupRental);
-
 //User Management
 app.post('/createUser', userController.preUser, userController.createUser);
 // app.post('/updateUser', userController.updateUser);
@@ -56,9 +53,9 @@ app.post('/createBox', boxController.createBox);
 //Rental Controller
 app.post('/createRental', rentalController.createRental);
 app.post('/pickupPin', auth.checkPin, rentalController.pickup);
-app.post('/pickupFace', auth.uploadFace, auth.checkFace, rentalController.pickup);
+app.post('/pickupFace',  auth.checkFace, rentalController.pickup);
 app.post('/dropoffPin', auth.checkPin, rentalController.dropoff);
-app.post('/dropoffFace', auth.uploadFace, auth.checkFace, rentalController.dropoff);
+app.post('/dropoffFace',  auth.checkFace, rentalController.dropoff);
 
 /**
  * Start Express server.

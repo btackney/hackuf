@@ -18,8 +18,8 @@ exports.preUser = (req, res, next) => {
         console.log('done');
         console.log("upload face");
         let s3 = new AWS.S3();
-        let uploadParams = { Bucket: 'hackuf', Body: '', Key: req.body.UserId + ":ProfilePic" , ACL: "public-read"};
-        let fileName = req.body.UserId + ":ProfilePic";
+        let uploadParams = { Bucket: 'hackuf', Body: '', Key: req.body.userId + "llProfilePic" , ACL: "public-read"};
+        let fileName = req.body.userId + "llProfilePic";
         let fileStream = fs.createReadStream(fileName);
         fileStream.on('error', function(err) {
             console.log('File Error', err);
@@ -35,10 +35,10 @@ exports.preUser = (req, res, next) => {
             if (data) {
                 console.log(data);
                 req.s3Info = data;
-                fs.unlink(req.body.UserId + ":ProfilePic", (err) => {
+                fs.unlink(req.body.userId + "llProfilePic", (err) => {
                     if (err) throw err;
                     console.log('successfully uploaded picture to s3 & deleted file');
-                    req.s3Name = req.body.UserId + ":ProfilePic";
+                    req.s3Name = req.body.userId + "llProfilePic";
                     return next();
                 });
             }
