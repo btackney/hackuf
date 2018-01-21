@@ -2,6 +2,7 @@ const http = require('http');
 const https = require('https');
 const bodyParser = require('body-parser');
 const express = require('express');
+const fs        = require('fs');
 const app = express();
 
 
@@ -33,6 +34,10 @@ const userController = require('./controllers/user');
 const rentalController = require('./controllers/rental');
 const boxController = require('./controllers/box');
 
+/**
+ * Middle Ware.
+ */
+const auth = require('./middleware/auth');
 
 /**
  * Routes.
@@ -50,12 +55,19 @@ app.post('/createBox', boxController.createBox);
 
 //Rental Controller
 app.post('/createRental', rentalController.createRental);
-app.post('/pickup', rentalController.pickup);
+app.post('/pickupPin', auth.checkPin, rentalController.pickup);
+app.post('/pickupFace', auth.uploadFace, auth.checkFace, rentalController.pickup);
 app.post('/dropoff', rentalController.dropoff);
 
-app.get('/hi', (req, res) => {
-    console.log("hi");
-    res.send('hi');
+
+
+app.get('/upload', (req, res) => {
+
+});
+
+
+app.get('/face', (req, res) => {
+
 });
 /**
  * Start Express server.

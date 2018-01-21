@@ -1,15 +1,14 @@
 const models = require('../models');
 
 exports.createUser = (req, res) => {
-    models.user.sync({force: true}).then(() => {
+    // models.user.sync({force: true}).then(() => {
         // Table created
         models.user.create({
             userId: req.query.userId,
-            name: req.query.name,
-            email: req.query.email,
-            // picture: req.query.picture,
+            faceImage: req.query.faceImage,
+            pin: req.query.pin
         });
-    });
+    // });
 };
 
 exports.updateUser = (req, res) => {
