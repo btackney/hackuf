@@ -2,9 +2,10 @@ const models = require('../models');
 
 
 exports.createRental = (req, res) => {
+
     models.rental.create({
         boxId: req.body.boxId,
-        userId: req.body.boxId,
+        userId: req.body.userId,
         pickup: new Date(),
         //TODO pin or face
         //TODO chargeamount calc by pickup - dropoff hours
