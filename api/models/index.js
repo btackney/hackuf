@@ -10,10 +10,8 @@ let sequelize = new Sequelize('hackuf', 'hackuf', 'hackufbox', {
         pool: {
             max: 5,
             min: 0,
-            idle: 5000,
-            acquire: 20000,
-            evict: 30000,
-            handleDisconnects: true
+            acquire: 30000,
+            idle: 10000
         },
         operatorsAliases: false
 });

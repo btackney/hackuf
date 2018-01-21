@@ -4,32 +4,57 @@ const AWS = require('aws-sdk');
 AWS.config.region = 'us-east-1';
 const rekognition = new AWS.Rekognition();
 const fs        = require('fs');
+const formidable = require('formidable');
+const crypto = require('crypto');
 
 exports.checkPin = (req, res, next) => {
-    let apiKey =  crypto.createHash('sha256').update(salt + req.query.pin).digest('hex');
-    console.log("a new api key: " + apiKey);
-    models.user.findOne({ where: {pin: apiKey} }).then(User => {
-        if(User){
-            req.User = User;
-            return next();
-        }
-        else{
-            res.status(400);
-            res.json({success: false, message: "Bad Pin"});
-        }
+    console.log(req.body);
+    models.user.findOne({ where: {pin: req.body.pin} })
+        .then(function(User)  {
+            console.log("check pin");
+            if(!User){
+                console.log("no user found");
+                res.status(400);
+                return res.json({success: false, message: "Bad Pin"});
+            } else {
+                console.log("has user");
+                req.User = User;
+                return next();
+            }
+    });
+
+};
+
+exports.downloadImage = (req, res, next) => {
+
+};
+
+exports.uploadForm = (req, res, next) => {
+    console.log("upload form");
+    console.log(req);
+    let form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
+        res.writeHead(200, {'content-type': 'text/plain'});
+        res.write('received upload:\n\n');
+        res.end(util.inspect({fields: fields, files: files}));
+        console.log("Form stuff:" + fields + files);
+        return next();
     });
 };
 
 exports.uploadFace = (req, res, next) => {
+    console.log("upload face");
     let s3 = new AWS.S3();
     let uploadParams = { Bucket: 'hackuf', Body: '', Key: 'brendanisgreatggfdg' , ACL: "public-read"};
-    let file = 'halloween2017.jpg';
-    let fileStream = fs.createReadStream(file);
-    fileStream.on('error', function(err) {
-        console.log('File Error', err);
-    });
-    uploadParams.Body = fileStream;
+    let file = req.body.image;
 
+    // let fileStream = fs.createReadStream(file);
+    // fileStream.on('error', function(err) {
+    //     console.log('File Error', err);
+    // });
+    // uploadParams.Body = fileStream;
+    uploadParams.Body = file;
+    console.log("uploadParams: " + uploadParams);
     s3.upload (uploadParams, function (err, data) {
         if (err) {
             console.log("Error", err);
@@ -42,7 +67,6 @@ exports.uploadFace = (req, res, next) => {
             return next();
         }
     });
-
 };
 
 exports.checkFace = (req, res, next) => {
@@ -64,6 +88,6 @@ exports.checkFace = (req, res, next) => {
     rekognition.compareFaces(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred
         else console.log(data);
-        return res.send(data);
+        return next();
     });
 };

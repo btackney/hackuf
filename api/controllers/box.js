@@ -15,19 +15,19 @@ exports.createBox = (req, res) => {
     console.log("create box");
     console.log(req);
     // models.box.sync({force: true}).then(() => {
-        console.log(JSON.stringify(req.query));
+        console.log(JSON.stringify(req.body));
         // Table created
         models.box.create({
-            name: req.query.name,
-            image: req.query.image,
-            description: req.query.description,
-            price: req.query.price,
-            latitude: req.query.latitude,
-            longitude: req.query.longitude,
+            name: req.body.name,
+            image: req.body.image,
+            description: req.body.description,
+            price: req.body.price,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
             available: 1
         }).then(Box => {
-            console.log(Box.get);
-            return res.json(Box.get);
+            console.log(Box);
+            return res.json(Box);
         });
     // });
 };

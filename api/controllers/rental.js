@@ -1,29 +1,10 @@
 const models = require('../models');
 
-const helpers = {
-    updateBoxAvailability: (req, status) => {
-        models.box.findById(req.query.boxId).then(Box => {
-            if(Box){
-                Box.updateAttributes({
-                    available: status
-                }).then(() => {
-                    let messageText = "";
-                    status === 0 ? messageText = "Successfully picked up rental" : messageText = "Successfully picked up rental";
-                    return res.json({success: true, message: messageText});
-                });
-            } else{
-                res.status(500);
-                return res.json({success: false, message: "An error occured, please try again."});
-            }
-
-        });
-    }
-};
 
 exports.createRental = (req, res) => {
     models.rental.create({
-        boxId: req.query.boxId,
-        userId: req.query.boxId,
+        boxId: req.body.boxId,
+        userId: req.body.boxId,
         pickup: new Date(),
         //TODO pin or face
         //TODO chargeamount calc by pickup - dropoff hours
@@ -31,7 +12,7 @@ exports.createRental = (req, res) => {
     }).then(Rental => {
         if (Rental) {
             console.log("rental made");
-            models.box.findById(req.query.boxId).then(Box => {
+            models.box.findById(req.body.boxId).then(Box => {
                 if (Box) {
                     Box.available = 0;
                     Box.save().then(() => {
@@ -57,11 +38,11 @@ exports.createRental = (req, res) => {
 
 exports.pickup = (req, res) => {
     models.rental.findOne({
-        where: {boxId: req.query.boxId, complete: 0, userId: req.User.userId}
+        where: {boxId: req.body.boxId, complete: 0, userId: req.User.userId}
     }).then(Rental => {
         console.log("rental " + Rental);
         if(Rental){
-            models.box.findById(req.query.boxId).then(Box => {
+            models.box.findById(req.body.boxId).then(Box => {
                 if(Box){
                     Box.available = 0;
                     Box.save().then(() => {
@@ -81,7 +62,7 @@ exports.pickup = (req, res) => {
 
 exports.dropoff = (req, res) => {
     models.rental.findOne({
-      where: {boxId: req.query.boxId, complete: 0, userId: req.User.userId}
+      where: {boxId: req.body.boxId, complete: 0, userId: req.User.userId}
     }).then(Rental => {
         console.log("rental " + Rental);
         if(Rental){
@@ -90,7 +71,7 @@ exports.dropoff = (req, res) => {
                 return res.json({success: true, message: "Thanks for bringing your rental back, we hope to see you again soon!"});
             });
 
-            models.box.findById(req.query.boxId).then(Box => {
+            models.box.findById(req.body.boxId).then(Box => {
                 if(Box){
                     Box.available = 0;
                     Box.save().then(() => {
