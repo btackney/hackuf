@@ -3,8 +3,8 @@ let path      = require('path');
 let Sequelize = require('sequelize');
 let basename  = path.basename(__filename);
 let db        = {};
-let sequelize = new Sequelize('hackuf', 'hackuf', 'hackufbox', {
-        host: 'hackuf.cul7mcskonmm.us-east-1.rds.amazonaws.com',
+let sequelize = new Sequelize(env.database, env.user, env.password, {
+        host: env.endpoint,
         dialect: 'mysql',
         port: 3306,
         pool: {
